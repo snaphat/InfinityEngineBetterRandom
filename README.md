@@ -28,17 +28,29 @@ __int64 __fastcall rand()
 }
 ```
 
-The original implementation of random for the Infinity Engine uses the specific variant of a [linear congruential generator](https://en.wikipedia.org/wiki/Linear_congruential_generator)
-shown above.
+The original implementation of random number generation in the Infinity Engine relies on a specific variant of a linear congruential generator, as shown above. However, versions of the game 
+running on platforms other than Windows, such as Linux, utilize different approaches by making system-level calls to the rand() function. As a result, they may not encounter the same issues 
+inherent in the original implementation.
 
-Versions of the games on platforms outside of Windows (E.g. Linux) don't utilize this implementation, but instead perform library calls to a system level rand() function; thus, they 
-don't necessarily suffer from the same defects.
+One notable consequence of this difference is that platforms with superior pseudo-random number generators may exhibit a higher likelihood of consecutive high rolls, such as consistently 
+rolling the maximum value (e.g., rolling all 6's during an ability roll).
 
-One consequence of the difference is that other platforms with better pseudo random number generators may have a higher probability of high consecutive rolls (e.g. rolling all 6's 
-during an ability roll). 
+This distinction becomes particularly evident when observing ability autorollers. With the original algorithm, the occurrence of ability roll totals surpassing 104 seems highly improbable, if 
+not impossible. However, when running an autoroller for an extended period on a Linux system with a different algorithm, roll totals of 105 and 106 do occur.
 
-This can be best seen with ability autorollers. With the original algorithm, it appears to be extremely unlikely (or perhaps even impossible) for roll totals that are higher than 104. 
-In Linux, on the other hand, 105 and 106 can readibly be seen after allowing an autoroller to run for a significant amount of time. 
+The provided table presents the probabilities of obtaining specific roll totals, along with their corresponding normalized and rounded relative probabilities. These relative probabilities serve 
+to highlight the relative disparity between the likelihood of rolling one specific total compared to another. For example, if you roll 104, you can anticipate rolling 103 approximately 4.399 times 
+on average. Of particular note is that the likelihood of rolling 105 should be only about 5.25 times less likely than 104.
+
+
+| **Roll Total** | **Probability of Occurrence** | **Normalized to 103** | **Normalized to 104** | **Normalized to 105** | **Normalized to 106** | **Normalized to 107** | **Normalized to 108** |
+|---------------:|------------------------------:|----------------------:|----------------------:|----------------------:|----------------------:|----------------------:|----------------------:|
+|            103 |               1 in 3856609580 |                1 in 1 |                       |                       |                       |                       |                       |
+|            104 |              1 in 16969082150 |            1 in 4.399 |                1 in 1 |                       |                       |                       |                       |
+|            105 |              1 in 89087681288 |           1 in 23.099 |            1 in 5.250 |                1 in 1 |                       |                       |                       |
+|            106 |             1 in 593917875254 |          1 in 153.999 |           1 in 35.000 |            1 in 6.666 |                1 in 1 |                       |                       |
+|            107 |            1 in 5642219814912 |         1 in 1462.999 |          1 in 332.500 |           1 in 63.333 |            1 in 9.499 |                1 in 1 |                       |
+|            108 |          1 in 101559956668416 |        1 in 26333.999 |         1 in 5985.000 |         1 in 1140.000 |          1 in 170.999 |               1 in 18 |                1 in 1 |
 
 ## Prerequisites
 
