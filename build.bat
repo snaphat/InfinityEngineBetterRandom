@@ -38,7 +38,7 @@ cd ..
 rem Set compilation variables
 set INCLUDE_PATH="Detours\include"
 set LIB_PATH="Detours\lib.X64"
-set OUTPUT_FILE="BetterRandomom_x64.dll"
+set OUTPUT_FILE="BetterRandom_x64.dll"
 set INPUT_FILE="BetterRandom.cpp"
 set LIB_FILES="detours.lib Dbghelp.lib user32.lib"
 
@@ -82,14 +82,14 @@ mkdir build
 REM ===================================================================================================================
 
 REM Move final files into build directory
-cp Detours\LICENSE.md build\LICENSE.detours
-cp LICENSE build\LICENSE.BetterRandom
-cp README.md build
-cp BetterRandom.bat build
-cp Detours\bin.X64\setdll.exe build\setdll_x64.exe
-cp Detours\bin.X86\setdll.exe build\setdll_x86.exe
-mv BetterRandom_x64.dll build
-mv BetterRandom_x86.dll build
+copy Detours\LICENSE.md build\LICENSE.detours
+copy LICENSE build\LICENSE.BetterRandom
+copy README.md build
+copy BetterRandom.bat build
+copy Detours\bin.X64\setdll.exe build\setdll_x64.exe
+copy Detours\bin.X86\setdll.exe build\setdll_x86.exe
+move BetterRandom_x64.dll build
+move BetterRandom_x86.dll build
 
 REM ===================================================================================================================
 
