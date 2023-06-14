@@ -82,7 +82,7 @@ mkdir build
 REM ===================================================================================================================
 
 REM Move final files into build directory
-copy Detours\LICENSE.md build\LICENSE.detours
+copy Detours\LICENSE.md build\LICENSE.Detours
 copy LICENSE build\LICENSE.BetterRandom
 copy README.md build
 copy BetterRandom.bat build
