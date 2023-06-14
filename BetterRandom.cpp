@@ -28,7 +28,14 @@ __declspec(dllexport) int WINAPI HookedRand()
     return dist(gen);
 }
 
-bool MatchPattern(const unsigned char* data, const unsigned char* pattern, int length)
+/**
+ * Match a pattern against data.
+ * @param data     The data to match against.
+ * @param pattern  The pattern to match.
+ * @param length   The length of the pattern.
+ * @return         True if the pattern matches the data, false otherwise.
+ */
+bool MatchPattern(const unsigned char *data, const unsigned char *pattern, int length)
 {
     for (int i = 0; i < length; ++i)
     {
@@ -44,7 +51,13 @@ bool MatchPattern(const unsigned char* data, const unsigned char* pattern, int l
     return true;
 }
 
-// Find the offset of a function within a module using a pattern
+/**
+ * Find the offset of a function within a module using a pattern.
+ * @param hModule  Handle to the module to search within.
+ * @param pattern  The pattern to search for.
+ * @param length   The length of the pattern.
+ * @return         The offset of the function if found, or 0x0 if not found.
+ */
 LPBYTE FindFunctionOffset(HMODULE hModule, const unsigned char *pattern, int length)
 {
     // Get the base address of the module
@@ -53,12 +66,12 @@ LPBYTE FindFunctionOffset(HMODULE hModule, const unsigned char *pattern, int len
     // Get the module's PE header
     auto ntHeader = ImageNtHeader(hModule);
     if (!ntHeader)
-        return 0; // Invalid PE header
+        return 0x0; // Invalid PE header
 
     // Get the image section header
     auto sectionHeader = IMAGE_FIRST_SECTION(ntHeader);
     if (!sectionHeader)
-        return 0; // Invalid section header
+        return 0x0; // Invalid section header
 
     // Search within the module's code section
     IMAGE_SECTION_HEADER *codeSectionHeader = nullptr;
@@ -82,7 +95,6 @@ LPBYTE FindFunctionOffset(HMODULE hModule, const unsigned char *pattern, int len
     for (; codeSectionMemory < endAddress; codeSectionMemory++)
     {
         if (MatchPattern(codeSectionMemory, pattern, length))
-        //  if (memcmp(codeSectionMemory, pattern, length) == 0)
             return (LPBYTE)codeSectionMemory;
     }
 
@@ -90,7 +102,9 @@ LPBYTE FindFunctionOffset(HMODULE hModule, const unsigned char *pattern, int len
     return 0x0;
 }
 
-// Function to initialize the hook
+/**
+ * Initialize the hook by finding the target function and attaching the custom implementation.
+ */
 void InitHook()
 {
     // Get the address of the target function
@@ -98,19 +112,19 @@ void InitHook()
 
     LPBYTE pFunctionAddress = 0x0;
 
-    // Find the offset of the target function using a specific pattern
-    
-    // Baldur's Gate EE, Baldur's Gate 2 EE, Icewind Dale EE, 
+    // Find the offset of the target function using specific patterns
+
+    // Pattern for Baldur's Gate EE, Baldur's Gate 2 EE, Icewind Dale EE
     unsigned char pattern1[] = "\x48\x83..\xE8.......\xFD\x43\x03\x00";
     if (pFunctionAddress == 0x0)
         pFunctionAddress = FindFunctionOffset(hModule, pattern1, sizeof(pattern1) - 1);
 
-    // Planescape EE
+    // Pattern for Planescape EE
     unsigned char pattern2[] = "\xE8.......\xFD\x43\x03\x00";
     if (pFunctionAddress == 0x0)
         pFunctionAddress = FindFunctionOffset(hModule, pattern2, sizeof(pattern2) - 1);
 
-    // Baldur's Gate, Baldur's Gate 2, Icewind Dale, Planescape Torment
+    // Pattern for Baldur's Gate, Baldur's Gate 2, Icewind Dale, Planescape Torment
     unsigned char pattern3[] = "\xE8....\x8B....\xFD\x43\x03\x00";
     if (pFunctionAddress == 0x0)
         pFunctionAddress = FindFunctionOffset(hModule, pattern3, sizeof(pattern3) - 1);
@@ -121,10 +135,14 @@ void InitHook()
         throw("Error: original rand() method not found!");
     }
 
+    // Obtain system information
     SYSTEM_INFO systemInfo;
     GetSystemInfo(&systemInfo);
 
+    // Retrieve the base address of the application
     auto baseAddress = systemInfo.lpMinimumApplicationAddress;
+
+    // Calculate the scan size by subtracting the minimum application address from the maximum application address
     auto scanSize = reinterpret_cast<SIZE_T>(systemInfo.lpMaximumApplicationAddress) - reinterpret_cast<SIZE_T>(systemInfo.lpMinimumApplicationAddress);
 
     // Get module info
@@ -141,7 +159,9 @@ void InitHook()
     DetourTransactionCommit();
 }
 
-// Function to remove the hook
+/**
+ * Remove the hook by detaching the custom implementation from the target function.
+ */
 void RemoveHook()
 {
     // Detach the hook
@@ -151,7 +171,13 @@ void RemoveHook()
     DetourTransactionCommit();
 }
 
-// Entry point of the DLL
+/**
+ * Entry point of the DLL.
+ * @param hinst     The handle to the DLL module.
+ * @param dwReason  The reason for calling the DLL entry point.
+ * @param reserved  Reserved parameter.
+ * @return          True if the DLL was initialized successfully, false otherwise.
+ */
 BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID reserved)
 {
     if (DetourIsHelperProcess())
