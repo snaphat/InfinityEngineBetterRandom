@@ -11,9 +11,9 @@ typedef int(WINAPI *OriginalRandFunc)();
 // Pointer to the original rand() function
 OriginalRandFunc pOriginalRand = NULL;
 
-std::random_device rd;                                  // Non-deterministic random number generator
-std::uniform_int_distribution<> dist(INT_MIN, INT_MAX); // Distribute results between INT_MIN and RAND_MAX
-std::mt19937 gen(rd());                                 // Seed Mersenne Twister generator
+std::random_device rd;                            // Non-deterministic random number generator
+std::uniform_int_distribution<> dist(0, INT_MAX); // Distribute results between INT_MIN and RAND_MAX
+std::mt19937 gen(rd());                           // Seed Mersenne Twister generator
 
 // Typedef for the original function
 typedef int (*OriginalFunc)(int);
