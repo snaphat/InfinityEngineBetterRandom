@@ -28,10 +28,17 @@ __int64 __fastcall rand()
 }
 ```
 
-The original implementation of random for the Infinity Engine uses the specific variant of a [linear congruential generator](https://en.wikipedia.org/wiki/Linear_congruential_generator) shown above.
+The original implementation of random for the Infinity Engine uses the specific variant of a [linear congruential generator](https://en.wikipedia.org/wiki/Linear_congruential_generator)
+shown above.
 
-In EE game versions, other platforms outside of Windows (E.g. Linux) don't utilize this implementation, but instead perform library calls to a system level rand() function; thus, they don't necessarily
-suffer from the same defects.
+Versions of the games on platforms outside of Windows (E.g. Linux) don't utilize this implementation, but instead perform library calls to a system level rand() function; thus, they 
+don't necessarily suffer from the same defects.
+
+One consequence of the difference is that other platforms with better pseudo random number generators may have a higher probability of high consecutive rolls (e.g. rolling all 6's 
+during an ability roll). 
+
+This can be best seen with ability autorollers. With the original algorithm, it appears to be extremely unlikely (or perhaps even impossible) for roll totals that are higher than 104. 
+In Linux, on the other hand, 105 and 106 can readibly be seen after allowing an autoroller to run for a significant amount of time. 
 
 ## Prerequisites
 
