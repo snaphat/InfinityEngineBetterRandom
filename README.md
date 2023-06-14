@@ -35,13 +35,13 @@ inherent in the original implementation.
 One notable consequence of this difference is that platforms with superior pseudo-random number generators may exhibit a higher likelihood of consecutive high rolls, such as consistently 
 rolling the maximum value (e.g., rolling all 6's during an ability roll).
 
-This distinction becomes particularly evident when observing ability autorollers. With the original algorithm, the occurrence of ability roll totals surpassing 104 seems highly improbable, if 
-not impossible. However, when running an autoroller for an extended period on a Linux system with a different algorithm, roll totals of 105 and 106 do occur.
+This distinction becomes particularly evident when observing ability autorollers. With the original algorithm, the occurrence of ability roll totals surpassing `104` seems highly improbable, if 
+not impossible. However, when running an autoroller for an extended period on a Linux system with a different algorithm, roll totals of `105` and `106` do occur.
 
-The provided table presents the probabilities of obtaining specific roll totals, along with their corresponding normalized and rounded relative probabilities. These relative probabilities serve 
-to highlight the relative disparity between the likelihood of rolling one specific total compared to another. For example, if you roll 104, you can anticipate rolling 103 approximately 4.399 times 
-on average. Of particular note is that the likelihood of rolling 105 should be only about 5.25 times less likely than 104.
-
+The table below provides the probabilities of achieving certain roll totals, along with their normalized and rounded relative probabilities. These relative probabilities demonstrate the 
+difference in likelihood between different roll totals. For instance, when rolling `104`, the average occurrence of rolling `103` is approximately `4.399` times. It is worth noting that, on 
+average, there should be one occurrence of rolling `105` for every `5.250` rolls of `104`. Similarly, on average, there should be one occurrence of rolling `106` for every `153.999` rolls of 
+`104`.
 
 | **Roll Total** | **Probability of Occurrence** | **Normalized to 103** | **Normalized to 104** | **Normalized to 105** | **Normalized to 106** | **Normalized to 107** | **Normalized to 108** |
 |---------------:|------------------------------:|----------------------:|----------------------:|----------------------:|----------------------:|----------------------:|----------------------:|
