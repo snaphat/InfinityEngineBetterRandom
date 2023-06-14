@@ -49,8 +49,8 @@ if "%IS64EXE%"=="True" (
 
 
 REM Prompt user for action
-echo 1. Add better random library to %TARGET_EXE%
-echo 2. Remove better random library from %TARGET_EXE%
+echo 1. Add BetterRandom library to %TARGET_EXE%
+echo 2. Remove BetterRandom library from %TARGET_EXE%
 set /p "ACTION=Enter action number (1 or 2): "
 
 
