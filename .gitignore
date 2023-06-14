@@ -1,0 +1,4 @@
+*.obj
+*.exp
+*.lib
+build
